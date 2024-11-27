@@ -17,7 +17,7 @@ bool isPalindrome(int x) {
 
     sprintf(str, "%d", x);
 
-    // loops the string from the end to its start, an then switch characters
+    // loop to switch the strings characters
 
     end = strlen(str ) - 1;
     while (start < end ){
