@@ -28,7 +28,7 @@ Output: [[1]]
 
 #Codes
 - `emaula.c` -> codigo feito em aula, apresenta erros.
-- **Erros cometidos no primeiro codigo :** memoria alocada de foram errada para p, logica errada no loop inteiro, uso de um ponteiro "inutil" de forma errada (returnSize).
+- **Erros cometidos no primeiro codigo :** memoria alocada de foram errada para p, logica errada no loop inteiro, uso do ponteiro returnSize de forma errada.
 - `emcasa.c` -> codigo feito em casa, funciona.
 
 
