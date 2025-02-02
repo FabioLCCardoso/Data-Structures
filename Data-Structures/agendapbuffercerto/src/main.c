@@ -34,6 +34,7 @@ int main(void)
         exit(EXIT_FAILURE);
     }
 
+    //setting the pointers to different parts of the buffer
     void *select = pBuffer;
     void *counter = (char *)select + sizeof(int);
     void *tempName = (char *)counter + sizeof(int);
