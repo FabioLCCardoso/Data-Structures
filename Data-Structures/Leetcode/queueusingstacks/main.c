@@ -1,6 +1,5 @@
 /*
 232
-
 Implement a first in first out (FIFO) queue using only two stacks. The implemented queue should support all the functions of a normal queue (push, peek, pop, and empty).
 
 Implement the MyQueue class:
@@ -16,6 +15,7 @@ Notes:
     Depending on your language, the stack may not be supported natively. You may simulate a stack using a list or deque (double-ended queue) as long as you use only a stack's standard operations.
 
 */
+
 
 
 
@@ -47,7 +47,9 @@ void push(Stack *s, int x){
         exit(EXIT_FAILURE);
     }
     newNode->val = x;
+    //link new node to the head
     newNode->next = s->head;
+    //update head of the stack
     s->head = newNode;
 }
 
@@ -58,13 +60,17 @@ int pop(Stack *s){
         exit(EXIT_FAILURE);
     } 
 
+    // store reference to top node
     node *temp = s->head;
+    //get node's value
     int value = temp->val;
+    //move head to next node 
     s->head = temp->next;
     free(temp);
+    //return popped value
     return value;
 }
-
+    //returns head value 
 int peek(Stack *s){
     if (isStackEmpty(s)){
         exit(EXIT_FAILURE);
@@ -91,6 +97,8 @@ MyQueue* obj = (MyQueue*)malloc(sizeof(MyQueue));
     if (!obj){
         exit(EXIT_FAILURE);
     }
+
+    //initialize both stacks
     initStack(&obj->s1);
     initStack(&obj->s2);
     
@@ -99,25 +107,33 @@ MyQueue* obj = (MyQueue*)malloc(sizeof(MyQueue));
 }
     //push element to the back of the queue
 void myQueuePush(MyQueue* obj, int x) {
+    
+    //push element to s1
     push(&obj->s1, x);
 }
-    //pop element from the front of the queue
+    //pop (remove) element from the front of the queue
 int myQueuePop(MyQueue* obj) {
+
+    //if s2 is empty, move elements from s1 to s2.
     if (isStackEmpty(&obj->s2)){
+        //while there's an element in s1, moves all elements from s1 to s2
         while(!isStackEmpty(&obj->s1)){
             push(&obj->s2, pop(&obj->s1));
         }
     }
+    //pop the head of s2
     return pop(&obj->s2);
 }
 
 // "peeks" the front element
 int myQueuePeek(MyQueue* obj) {
+    //if s2 is empty, move elements from s1 to s2
     if (isStackEmpty(&obj->s2)){
         while(!isStackEmpty(&obj->s1)){
             push(&obj->s2, pop(&obj->s1));
         }
     }
+    //return the top of s2 without popping it
     return peek(&obj->s2);
 }
 
