@@ -22,6 +22,7 @@ while(op >= 0 && op<4){
  }
     switch(op){
         case 1:
+        printf("Digite o nome:");
         scanf("%s", tempname);
         getchar();
         //if name is empty, it will allocate memory and copy tempname contents
@@ -40,9 +41,26 @@ while(op >= 0 && op<4){
         }
         break;
         //TODO remove function to find and remove names chosen by the user
-        case 2:
+        case 2: 
+        printf("\nDigite o nome que deseja remover :");
+        scanf("%s", tempname);
+        getchar();
+        
+        
+        for(int i = 0; i < strlen(name); i++){
+            for(int j = i + 1; j < strlen(name); j++){
+                if( name[i] == tempname[i] && name[j] == tempname[j]){
+                    while ( name[i] == tempname[i]  ){
+                        name[i] = name[j];
+                    }
+                }
+            }
+        }
+      //  char *newname = realloc(name, strlen(name) +1);
+       // name = newname;
+        
         break;
-        //just list the names
+        //just list names
         case 3:
         for(int i = 0; i<strlen(name); i++ ){
             printf("%c", name[i]);
