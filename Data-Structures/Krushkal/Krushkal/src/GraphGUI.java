@@ -314,11 +314,28 @@ public class GraphGUI extends JFrame {
                     outputArea.append(String.valueOf((char) b));
                 }
             }));
-            Krushkal.findMST(graph);
-            System.setOut(originalOut);
+            try{
+                List<Krushkal.Edge> mst = Krushkal.findMST(graph, vertices.size());
+                System.setOut(originalOut);
+
+                for(Krushkal.Edge edge: mst){
+                    mstEdges.add(new Edge(edge.src, edge.dest, edge.weight));
+                }
+                KrushkalUsed = true;
+                canvas.repaint();
+                outputArea.append("MST edges computed successfully!");
+            }catch(Exception ex){
+                System.setOut(originalOut);
+                outputArea.append("Error: " + ex.getMessage());
+            }
+
+
+
+            /*Krushkal.findMST(graph);
+            System.setOut(originalOut); */
 
             // Extract MST edges for visualization
-            int[][] adjMatrix = graph.getMatrix();
+           /* int[][] adjMatrix = graph.getMatrix();
             for (int i = 0; i < vertices.size(); i++) {
                 for (int j = i + 1; j < vertices.size(); j++) {
                     if (adjMatrix[i][j] != graph.INF() && adjMatrix[i][j] != 0) {
@@ -332,6 +349,8 @@ public class GraphGUI extends JFrame {
             }
             KrushkalUsed = true;
             canvas.repaint();
+
+            */
         });
 
         clearButton.addActionListener(e -> {
@@ -346,7 +365,7 @@ public class GraphGUI extends JFrame {
         });
     }
 
-    // Helper to get MST edges
+    /* // Helper to get MST edges
     private List<Krushkal.Edge> getMSTEdges() {
         List<Krushkal.Edge> mst = new ArrayList<>();
         java.util.PriorityQueue<Krushkal.Edge> edgesPQ = new java.util.PriorityQueue<>();
@@ -370,6 +389,6 @@ public class GraphGUI extends JFrame {
             }
         }
         return mst;
-    }
+    } */
 
 }

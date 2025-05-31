@@ -24,7 +24,6 @@ public class Main {
             System.out.println("Enter a number between 1 and 20: ");
         }
         //Create graph
-        new GraphGUI().setVisible(true);
         Graph graph = new Graph(nVERTICES);
         //Read edge weights for all vertex pairs, also validates weights to be positive.
         for (int i = 0; i < nVERTICES; i++) {
@@ -83,7 +82,7 @@ public class Main {
                 break;
         //Run Krushkal's algorithm'
             case 2:
-                Krushkal.findMST(graph);
+                Krushkal.findMST(graph, nVERTICES);
                 break;
             default:
                 System.out.println("Invalid input! Please enter 1 or 2");

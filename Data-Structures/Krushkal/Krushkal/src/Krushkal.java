@@ -52,14 +52,14 @@ public class Krushkal {
             return true;
         }
     }
-    public static void findMST(Graph g){
-        int nVERTICES = g.size();
+    public static  java.util.List<Edge>findMST(Graph g, int activeVertices){
+      //  int nVERTICES = g.size();
         int INF = g.INF();
-        UnionFind uf = new UnionFind(nVERTICES);
+        UnionFind uf = new UnionFind(activeVertices);
         java.util.PriorityQueue<Edge> edges = new java.util.PriorityQueue<>();
         int [][] adjMatrix = g.getMatrix();
-        for(int i=0;i<nVERTICES;i++){
-            for(int j= i + 1 ;j < nVERTICES; j++){
+        for(int i=0;i<activeVertices;i++){
+            for(int j= i + 1 ;j < activeVertices; j++){
                 if(adjMatrix[i][j]!=INF && adjMatrix[i][j] != 0){
                     edges.offer(new Edge( i, j, adjMatrix[i][j]));
                 }
@@ -69,7 +69,7 @@ public class Krushkal {
         int totalWeight = 0;
         int edgesAdded = 0;
 
-        while(!edges.isEmpty() && edgesAdded < nVERTICES - 1){
+        while(!edges.isEmpty() && edgesAdded < activeVertices - 1){
             Edge edge = edges.poll();
             if(uf.union(edge.src, edge.dest)){
                 mst.add(edge);
@@ -77,9 +77,9 @@ public class Krushkal {
                 edgesAdded++;
             }
         }
-        if(edgesAdded < nVERTICES - 1){
+        if(edgesAdded < activeVertices - 1){
             System.out.println("No MST possible");
-            return;
+            return mst;
         }
 
         System.out.println("MST edges:");
@@ -104,6 +104,7 @@ public class Krushkal {
             }
         }
         System.out.println("}");
+        return mst;
     }
     }
 
