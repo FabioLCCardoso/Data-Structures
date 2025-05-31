@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.foreign.AddressLayout;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +17,8 @@ public class GraphGUI extends JFrame {
     private boolean addingVertex;
     private JTextArea outputArea;
     private final int MAX_VERTICES = 20;
+    private boolean isAdded = false;
+    private boolean KrushkalUsed = false;
 
     // Vertex class to store position and label
     private static class Vertex {
@@ -74,6 +77,15 @@ public class GraphGUI extends JFrame {
                 g2d.drawString(String.valueOf(v.id), v.x - 5, v.y + 5);
                 g2d.setColor(Color.BLUE);
             }
+            if(KrushkalUsed){
+                g2d.setColor(Color.RED);
+                for (Vertex v : vertices) {
+                    g2d.fillOval(v.x - 15, v.y - 15, 30, 30);
+                    g2d.setColor(Color.WHITE);
+                    g2d.drawString(String.valueOf(v.id), v.x - 5, v.y + 5);
+                    g2d.setColor(Color.RED);
+                }
+            }
         }
 
         private void DrawLine(Graphics2D g2d, Edge edge, Vertex v1, Vertex v2) {
@@ -129,7 +141,6 @@ public class GraphGUI extends JFrame {
         canvas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                //  add vertex
                 if (!addingEdge && addingVertex) {
                     int id = vertices.size();
                     if (id >= MAX_VERTICES) {
@@ -138,10 +149,10 @@ public class GraphGUI extends JFrame {
                     }
                     vertices.add(new Vertex(id, e.getX(), e.getY()));
                     canvas.repaint();
+                    addingVertex = false;
                 } else {
-                    //add edges
                     for (Vertex v : vertices) {
-                        if (Math.abs(v.x - e.getX()) < 15 && Math.abs(v.y - e.getY()) < 15) {
+                        if (Math.abs(v.x - e.getX()) < 25 && Math.abs(v.y - e.getY()) < 25) {
                             if (selectedVertex1 == null) {
                                 selectedVertex1 = v;
                             } else if (selectedVertex2 == null && v != selectedVertex1) {
@@ -156,6 +167,7 @@ public class GraphGUI extends JFrame {
                                     if (weight > 0) {
                                         graph.addEdge(selectedVertex1.id, selectedVertex2.id, weight);
                                         edges.add(new Edge(selectedVertex1.id, selectedVertex2.id, weight));
+                                        addingEdge = false;
                                         canvas.repaint();
                                     }
                                 } catch (NumberFormatException ex) {
@@ -163,7 +175,7 @@ public class GraphGUI extends JFrame {
                                 }
                                 selectedVertex1 = null;
                                 selectedVertex2 = null;
-                                addingEdge = false;
+
                             }
                             break;
                         }
@@ -226,9 +238,35 @@ public class GraphGUI extends JFrame {
                                 return;
                             }
                             if (weight > 0) {
+                                int[][] adjMatrix = graph.getMatrix();
+                                if (adjMatrix[i][j] != graph.INF() && adjMatrix[i][j] != 0) {
+                                    JOptionPane.showMessageDialog(this,
+                                            "Edge (" + i + "," + j + ") already exists with weight " + adjMatrix[i][j] + "!");
+                                    continue; // Skip adding if edge exists
+                                }
+                                isAdded = false;
+                                for(Edge edge: edges) {
+                                    if (edge.src == i && edge.dest == j || edge.src == j && edge.dest == i) {
+                                        isAdded = true;
+                                        break;
+                                    }
+                                }
+                                if(isAdded) {
+                                    JOptionPane.showMessageDialog(this,
+                                            "Edge (" + i + "," + j + ") already exists in the display!");
+                                    continue; // Skip adding if edge exists
+                                }
+
                                 graph.addEdge(i, j, weight);
                                 graph.addEdge(j, i, weight);
-                            }
+                                isAdded = true;
+                                edges.add(new Edge(i, j, weight));
+                                }
+
+
+
+
+
                         } catch (NumberFormatException ex) {
                             JOptionPane.showMessageDialog(this, "Invalid weight!");
                             return;
@@ -292,6 +330,7 @@ public class GraphGUI extends JFrame {
                     }
                 }
             }
+            KrushkalUsed = true;
             canvas.repaint();
         });
 
@@ -302,6 +341,7 @@ public class GraphGUI extends JFrame {
             mstEdges.clear();
             graph = new Graph(MAX_VERTICES);
             outputArea.setText("");
+            KrushkalUsed = false;
             canvas.repaint();
         });
     }
@@ -332,9 +372,4 @@ public class GraphGUI extends JFrame {
         return mst;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new GraphGUI().setVisible(true);
-        });
-    }
 }

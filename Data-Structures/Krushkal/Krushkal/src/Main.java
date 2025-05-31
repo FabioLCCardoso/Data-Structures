@@ -24,6 +24,7 @@ public class Main {
             System.out.println("Enter a number between 1 and 20: ");
         }
         //Create graph
+        new GraphGUI().setVisible(true);
         Graph graph = new Graph(nVERTICES);
         //Read edge weights for all vertex pairs, also validates weights to be positive.
         for (int i = 0; i < nVERTICES; i++) {
